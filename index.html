@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Objeto 3D</title>
+    <!-- Cargar Three.js como módulo -->
+    <script type="module">
+        import * as THREE from './js/three.min.js';
+        import { OrbitControls } from './js/OrbitControls.js';
+
+        // Crear escena
+        const scene = new THREE.Scene();
+
+        // Crear cámara
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 5;
+
+        // Crear renderizador
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Crear un cubo con material con sombreado
+        const geometry = new THREE.BoxGeometry();
+        const material = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
+        const cube = new THREE.Mesh(geometry, material);
+        scene.add(cube);
+
+        // Añadir una luz direccional para ver el cubo correctamente
+        const light = new THREE.DirectionalLight(0xffffff, 1);
+        light.position.set(5, 5, 5).normalize();
+        scene.add(light);
+
+        // Agregar controles de órbita
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;  // Activar suavizado
+        controls.dampingFactor = 0.25; // Factor de suavizado
+        controls.screenSpacePanning = false; // Desactivar paneo en el espacio de pantalla
+        controls.maxPolarAngle = Math.PI / 2; // Limitar la rotación vertical
+
+        // Animación
+        function animate() {
+            requestAnimationFrame(animate);
+            cube.rotation.x += 0.01; // Gira el cubo en el eje X
+            cube.rotation.y += 0.01; // Gira el cubo en el eje Y
+            controls.update(); // Actualizar controles
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Ajustar el renderizador al redimensionar la ventana
+        window.addEventListener('resize', () => {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+        });
+    </script>
+</head>
+<body>
+</body>
+</html>
