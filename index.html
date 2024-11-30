@@ -22,19 +22,20 @@
 
         // Geometría y materiales de la tarjeta
         const cardGeometry = new THREE.PlaneGeometry(2, 1.5);
-        const frontTexture = new THREE.TextureLoader().load('frontal.jpg', () => {
-    frontMaterial.map = frontTexture;
-    frontMaterial.needsUpdate = true;
-});
 
-const backTexture = new THREE.TextureLoader().load('trasera.jpg', () => {
-    backMaterial.map = backTexture;
-    backMaterial.needsUpdate = true;
-});
+        // Cargar las texturas desde el repositorio de GitHub
+        const frontTexture = new THREE.TextureLoader().load('frontal.jpg');  // Asumiendo que está en la raíz
+        const backTexture = new THREE.TextureLoader().load('trasera.jpg');  // Asumiendo que está en la raíz
+
+        // Crear los materiales
         const frontMaterial = new THREE.MeshBasicMaterial({ map: frontTexture });
         const backMaterial = new THREE.MeshBasicMaterial({ map: backTexture });
-        const cardMesh = new THREE.Mesh(cardGeometry, new THREE.MeshBasicMaterial({ side: THREE.DoubleSide }));
-        cardMesh.material.materials = [frontMaterial, backMaterial];
+        
+        // Crear el mesh de la tarjeta con dos materiales (frontal y trasero)
+        const cardMesh = new THREE.Mesh(cardGeometry, [
+            frontMaterial, // Material frontal
+            backMaterial   // Material trasero
+        ]);
         scene.add(cardMesh);
 
         // Posición de la cámara
